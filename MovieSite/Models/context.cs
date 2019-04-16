@@ -5,13 +5,13 @@ using MovieSite.Models;
 
 namespace MovieSite.Models
 {
-    public partial class DPROJECTWEBASP_COREMOVIESITEDATABASEDBMDFContext : DbContext
+    public partial class Context : DbContext
     {
-        public DPROJECTWEBASP_COREMOVIESITEDATABASEDBMDFContext()
+        public Context()
         {
         }
 
-        public DPROJECTWEBASP_COREMOVIESITEDATABASEDBMDFContext(DbContextOptions<DPROJECTWEBASP_COREMOVIESITEDATABASEDBMDFContext> options)
+        public Context(DbContextOptions<Context> options)
             : base(options)
         {
         }
@@ -20,8 +20,7 @@ namespace MovieSite.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlServer("Server=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=D:\\project\\web\\ASP_Core\\MovieSite\\DataBase\\DB.mdf;Integrated Security=True;Connect Timeout=30");
+                throw new Exception(" No Connection string if (!optionsBuilder.IsConfigured)");
             }
         }
 
