@@ -9,7 +9,7 @@ using MovieSite.Models;
 
 namespace MovieSite.Migrations
 {
-    [DbContext(typeof(DPROJECTWEBASP_COREMOVIESITEDATABASEDBMDFContext))]
+    [DbContext(typeof(Context))]
     [Migration("20190415210723_Initial")]
     partial class Initial
     {

@@ -8,8 +8,8 @@ using MovieSite.Models;
 
 namespace MovieSite.Migrations
 {
-    [DbContext(typeof(DPROJECTWEBASP_COREMOVIESITEDATABASEDBMDFContext))]
-    partial class DPROJECTWEBASP_COREMOVIESITEDATABASEDBMDFContextModelSnapshot : ModelSnapshot
+    [DbContext(typeof(Context))]
+    partial class Context : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
