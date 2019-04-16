@@ -9,13 +9,13 @@ using MovieSite.Models;
 
 namespace MovieSite.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[Controller]")]
     [ApiController]
     public class MoviesController : ControllerBase
     {
-        private readonly DPROJECTWEBASP_COREMOVIESITEDATABASEDBMDFContext _context;
+        private readonly Context _context;
 
-        public MoviesController(DPROJECTWEBASP_COREMOVIESITEDATABASEDBMDFContext context)
+        public MoviesController(Context context)
         {
             _context = context;
         }
@@ -31,47 +31,49 @@ namespace MovieSite.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Movie>> GetMovie(string id)
         {
-            var movie = await _context.Movie.FindAsync(id);
-
-            if (movie == null)
+            if (!int.TryParse(id,out var idNum) || idNum < 1)
+                return Content("Movie ID should be Greater than 0");
+            
+            var movie = await _context.Movie.Skip<Movie>(idNum - 1).FirstOrDefaultAsync();
+            if (movie == null )
             {
                 return NotFound();
             }
-
             return movie;
         }
 
         // PUT: api/Movies/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutMovie(string id, Movie movie)
-        {
-            if (id != movie.Name)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(movie).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!MovieExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
+//        [HttpPut("{id}")]
+//        public async Task<IActionResult> PutMovie(string id, Movie movie)
+//        {
+//            if (id != movie.Name)
+//            {
+//                return BadRequest();
+//            }
+//
+//            _context.Entry(movie).State = EntityState.Modified;
+//
+//            try
+//            {
+//                await _context.SaveChangesAsync();
+//            }
+//            catch (DbUpdateConcurrencyException)
+//            {
+//                if (!MovieExists(id))
+//                {
+//                    return NotFound();
+//                }
+//                else
+//                {
+//                    throw;
+//                }
+//            }
+//
+//            return NoContent();
+//        }
 
         // POST: api/Movies
+
         [HttpPost]
         public async Task<ActionResult<Movie>> PostMovie(Movie movie)
         {
@@ -96,10 +98,10 @@ namespace MovieSite.Controllers
         }
 
         // DELETE: api/Movies/5
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<Movie>> DeleteMovie(string id)
+        [HttpDelete("{name}/{published}")]
+        public async Task<ActionResult<Movie>> DeleteMovie(string name,DateTime published)
         {
-            var movie = await _context.Movie.FindAsync(id);
+            var movie = await _context.Movie.FindAsync(name,published);
             if (movie == null)
             {
                 return NotFound();
