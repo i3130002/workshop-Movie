@@ -28,51 +28,52 @@ namespace MovieSite.Controllers
         }
 
         // GET: api/Movies/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Movie>> GetMovie(string id)
+        [HttpGet("{name}/{published}")]
+        public async Task<ActionResult<Movie>> GetMovie(string name, DateTime published)
         {
-            if (!int.TryParse(id,out var idNum) || idNum < 1)
-                return Content("Movie ID should be Greater than 0");
-            
-            var movie = await _context.Movie.Skip<Movie>(idNum - 1).FirstOrDefaultAsync();
-            if (movie == null )
+            var movie = await _context.Movie.FindAsync(name, published);
+            if (movie == null)
             {
                 return NotFound();
             }
             return movie;
         }
 
-        // PUT: api/Movies/5
-//        [HttpPut("{id}")]
-//        public async Task<IActionResult> PutMovie(string id, Movie movie)
-//        {
-//            if (id != movie.Name)
-//            {
-//                return BadRequest();
-//            }
-//
-//            _context.Entry(movie).State = EntityState.Modified;
-//
-//            try
-//            {
-//                await _context.SaveChangesAsync();
-//            }
-//            catch (DbUpdateConcurrencyException)
-//            {
-//                if (!MovieExists(id))
-//                {
-//                    return NotFound();
-//                }
-//                else
-//                {
-//                    throw;
-//                }
-//            }
-//
-//            return NoContent();
-//        }
+        // GET: api/Movies/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Movie>> GetMovie(string id)
+        {
+            if (!int.TryParse(id, out var idNum) || idNum < 1)
+                return Content("Movie ID should be Greater than 0");
 
-        // POST: api/Movies
+            var movie = await _context.Movie.Skip<Movie>(idNum - 1).FirstOrDefaultAsync();
+            if (movie == null)
+            {
+                return NotFound();
+            }
+            return movie;
+        }
+
+        [HttpPost("{name}/{published}")]
+        public async Task<ActionResult<Movie>> EditMovie(string name, DateTime published, Movie newMovie)
+        {
+            var movie = await _context.Movie.FindAsync(name, published);
+            if (movie == null)
+            {
+                return NotFound();
+            }
+
+            if (name == newMovie.Name && published == newMovie.Published)
+            {
+                _context.Movie.Update(newMovie);
+                await _context.SaveChangesAsync();
+                return Content("Updated");
+            }
+
+            await DeleteMovie(name, published);
+            await PostMovie(newMovie);
+            return Content("Updated");
+        }
 
         [HttpPost]
         public async Task<ActionResult<Movie>> PostMovie(Movie movie)
@@ -84,7 +85,7 @@ namespace MovieSite.Controllers
             }
             catch (DbUpdateException)
             {
-                if (MovieExists(movie.Name))
+                if (MovieExists(movie.Name, movie.Published))
                 {
                     return Conflict();
                 }
@@ -99,9 +100,9 @@ namespace MovieSite.Controllers
 
         // DELETE: api/Movies/5
         [HttpDelete("{name}/{published}")]
-        public async Task<ActionResult<Movie>> DeleteMovie(string name,DateTime published)
+        public async Task<ActionResult<Movie>> DeleteMovie(string name, DateTime published)
         {
-            var movie = await _context.Movie.FindAsync(name,published);
+            var movie = await _context.Movie.FindAsync(name, published);
             if (movie == null)
             {
                 return NotFound();
@@ -113,9 +114,11 @@ namespace MovieSite.Controllers
             return movie;
         }
 
-        private bool MovieExists(string id)
+        private bool MovieExists(string movieName, DateTime published)
         {
-            return _context.Movie.Any(e => e.Name == id);
+            return _context.Movie.Any(e => e.Name == movieName && e.Published == published);
         }
+
+
     }
 }
