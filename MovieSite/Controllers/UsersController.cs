@@ -13,9 +13,9 @@ namespace MovieSite.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        private readonly DPROJECTWEBASP_COREMOVIESITEDATABASEDBMDFContext _context;
+        private readonly Context _context;
 
-        public UsersController(DPROJECTWEBASP_COREMOVIESITEDATABASEDBMDFContext context)
+        public UsersController(Context context)
         {
             _context = context;
         }
