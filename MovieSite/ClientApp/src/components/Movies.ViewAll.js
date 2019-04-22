@@ -4,7 +4,7 @@ import { MoviesEdit } from "./Movies.Edit.js"
 
 export class MoviesViewAll extends Component {
     render() {
-        
+
         return (
             <div>
                 <h1>Wellcome to View All Movies</h1>
@@ -21,7 +21,7 @@ export class MoviesTable extends Component {
 
     constructor(props) {
         super(props);
-        this.state = { forecasts: [], loading: true, refresh: false, RemoveMessage:null };
+        this.state = { forecasts: [], loading: true, refresh: false, RemoveMessage: null };
         this.fetchMovies = this.fetchMovies.bind(this);
         this.renderForecastsTable = this.renderForecastsTable.bind(this);
         this.removeRrefreshHandler = this.removeRrefreshHandler.bind(this);
@@ -71,33 +71,38 @@ export class MoviesTable extends Component {
     }
 
     renderForecastsTable(data) {
-        return (
-            <table className='table table-striped'>
-                <thead>
-                    <tr>
-                        {
-                            Object.keys(data[0]).map(key =>
+        if (data.length == 0)
+            return <p>No movie to show</p>
+        else {
+            return (
+
+                < table className='table table-striped' >
+                    <thead>
+                        <tr>
+                            <th>Edit</th>
+                            {Object.keys(data[0]).map(key =>
                                 <th key={key}>{key}</th>
-                            )
-                        }
-                    </tr>
-                </thead>
-                <tbody key="tbody">
-                    {
+                            )}
+                            <th>Remove</th>
+                        </tr>
+                    </thead>
+                    <tbody key="tbody">
+                        {
 
-                        data.map((row_, index) =>
-                            <tr key={"Movies" + index}>
-                                <td><MoviesEdit refreshHandler={this.removeRrefreshHandler} movie={row_}/></td>
-                                {Object.values(row_).map((item, index_) => <td key={"MoviesItem" + index + index_}>{item}</td>)}
-                                <td><MoviesRemove refreshHandler={this.removeRrefreshHandler} movieName={row_['name']} moviePublished={row_['published']} /></td>
+                            data.map((row_, index) =>
+                                <tr key={"Movies" + index}>
+                                    <td><MoviesEdit refreshHandler={this.removeRrefreshHandler} movie={row_} /></td>
+                                    {Object.values(row_).map((item, index_) => <td key={"MoviesItem" + index + index_}>{item}</td>)}
+                                    <td><MoviesRemove refreshHandler={this.removeRrefreshHandler} movieName={row_['name']} moviePublished={row_['published']} /></td>
 
-                            </tr>
-                        )}
+                                </tr>
+                            )}
 
 
-                </tbody>
-            </table>
-        );
+                    </tbody>
+                </table >
+            );
+        }
     }
     render() {
         let contents = this.state.loading
