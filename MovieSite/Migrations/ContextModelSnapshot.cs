@@ -3,17 +3,15 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MovieSite.Models;
 
 namespace MovieSite.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20190415210723_Initial")]
-    partial class Initial
+    partial class ContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -25,7 +23,8 @@ namespace MovieSite.Migrations
                 {
                     b.Property<string>("Name");
 
-                    b.Property<DateTime>("Published");
+                    b.Property<DateTime>("Published")
+                        .HasColumnType("Date");
 
                     b.Property<string>("Description");
 
@@ -34,6 +33,22 @@ namespace MovieSite.Migrations
                     b.HasKey("Name", "Published");
 
                     b.ToTable("Movie");
+                });
+
+            modelBuilder.Entity("MovieSite.Models.Users", b =>
+                {
+                    b.Property<string>("Username")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Email");
+
+                    b.Property<bool>("IsAdmin");
+
+                    b.Property<string>("Phone");
+
+                    b.HasKey("Username");
+
+                    b.ToTable("Users");
                 });
 #pragma warning restore 612, 618
         }

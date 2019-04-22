@@ -10,8 +10,8 @@ using MovieSite.Models;
 namespace MovieSite.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20190415211458_2")]
-    partial class CreateUsers
+    [Migration("20190422175358_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -25,7 +25,8 @@ namespace MovieSite.Migrations
                 {
                     b.Property<string>("Name");
 
-                    b.Property<DateTime>("Published");
+                    b.Property<DateTime>("Published")
+                        .HasColumnType("Date");
 
                     b.Property<string>("Description");
 
