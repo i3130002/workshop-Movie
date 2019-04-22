@@ -99,7 +99,7 @@ namespace MovieSite.Controllers
         }
 
         // DELETE: api/Movies/5
-        [HttpDelete("{name}/{published}")]
+        [HttpDelete("{name?}/{published?}")]
         public async Task<ActionResult<Movie>> DeleteMovie(string name, DateTime published)
         {
             var movie = await _context.Movie.FindAsync(name, published);
