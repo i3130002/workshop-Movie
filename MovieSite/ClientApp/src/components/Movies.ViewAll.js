@@ -75,7 +75,6 @@ export class MoviesTable extends Component {
             return <p>No movie to show</p>
         else {
             return (
-
                 < table className='table table-striped' >
                     <thead>
                         <tr>
@@ -88,17 +87,13 @@ export class MoviesTable extends Component {
                     </thead>
                     <tbody key="tbody">
                         {
-
                             data.map((row_, index) =>
                                 <tr key={"Movies" + index}>
                                     <td><MoviesEdit refreshHandler={this.removeRrefreshHandler} movie={row_} /></td>
                                     {Object.values(row_).map((item, index_) => <td key={"MoviesItem" + index + index_}>{item}</td>)}
                                     <td><MoviesRemove refreshHandler={this.removeRrefreshHandler} movieName={row_['name']} moviePublished={row_['published']} /></td>
-
                                 </tr>
                             )}
-
-
                     </tbody>
                 </table >
             );
