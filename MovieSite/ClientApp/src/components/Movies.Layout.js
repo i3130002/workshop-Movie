@@ -38,7 +38,7 @@ export class MoviesLayout extends React.Component {
         event.preventDefault();
         var state_ = this.state
         this.setState({ movie: { name: "", published: "", director: "", description: "" } })
-        this.props.onSubmit(state_)
+        this.props.onSubmit(state_.movie)
     }
 
     render() {
