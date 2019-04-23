@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Switch, Component } from 'react';
 import { Route } from 'react-router';
 import { Layout } from './components/Layout';
 import { Home } from './components/Home';
@@ -15,17 +15,15 @@ export default class App extends Component {
 
   render () {
     return (
-      <Layout>
-        <Route exact path='/' component={Home} />
-        <Route path='/counter' component={Counter} />
-        <Route path='/fetch-data' component={FetchData} />
-            <Route path='/Movies' component={Movies} />
-            <Route path='/MoviesViewAll' component={MoviesViewAll} />
-            <Route path='/MoviesRemove' component={MoviesRemove} />
-            <Route path='/MoviesEdit' component={MoviesEdit} />
-            {<Route path='*' component={NotFound} />
-            }
-
+        <Layout>
+                <Route exact path='/' component={Home} />
+                <Route path='/counter' component={Counter} />
+                <Route path='/fetch-data' component={FetchData} />
+                <Route path='/Movies' component={Movies} />
+                <Route path='/MoviesViewAll' component={MoviesViewAll} />
+                <Route path='/MoviesRemove' component={MoviesRemove} />
+                <Route path='/MoviesEdit' component={MoviesEdit} />
+                <Route path='/NotFound' component={NotFound} />
       </Layout>
     );
   }
