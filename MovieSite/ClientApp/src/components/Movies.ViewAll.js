@@ -24,7 +24,9 @@ export class MoviesTable extends Component {
         this.state = { forecasts: [], loading: true, refresh: false, RemoveMessage: null };
         this.fetchMovies = this.fetchMovies.bind(this);
         this.renderForecastsTable = this.renderForecastsTable.bind(this);
-        this.removeRrefreshHandler = this.removeRrefreshHandler.bind(this);
+        this.generalRefreshHandler = this.generalRefreshHandler.bind(this);
+        this.editMovieRrefreshHandler = this.editMovieRrefreshHandler.bind(this);
+        this.removeRrefreshHandler = this.removeMovieRrefreshHandler.bind(this);
 
     }
 
@@ -49,11 +51,17 @@ export class MoviesTable extends Component {
         }
     }
 
-    removeRrefreshHandler(data) {
+    removeMovieRrefreshHandler(data) {
+        this.generalRefreshHandler(data, 'Movie removed','Problem removing movie')
+    }
+    editMovieRrefreshHandler(data) {
+        this.generalRefreshHandler(data, 'Movie edited', 'Problem editing movie')
+    }
+    generalRefreshHandler(data, successMSG, errorMSG) {
         if (data.ok) {
             this.setState({
                 RemoveMessage: < div className="alert alert-success" >
-                    <strong>Success!</strong> Movie removed
+                    <strong>Success!</strong> {successMSG}
                 </div >,
                 refresh: !this.state.refresh
             })
@@ -62,16 +70,14 @@ export class MoviesTable extends Component {
             this.setState({
                 RemoveMessage:
                     < div className="alert alert-danger" >
-                        <strong>Error!</strong> Problem adding movie (code: {data.status}) {data.statusText}.</div >,
+                        <strong>Error!</strong> {errorMSG} (code: {data.status}) {data.statusText}.</div >,
                 refresh: !this.state.refresh
             })
-
         }
-
     }
 
     renderForecastsTable(data) {
-        if (data.length == 0)
+        if (data.length === 0)
             return <p>No movie to show</p>
         else {
             return (
@@ -89,9 +95,9 @@ export class MoviesTable extends Component {
                         {
                             data.map((row_, index) =>
                                 <tr key={"Movies" + index}>
-                                    <td><MoviesEdit refreshHandler={this.removeRrefreshHandler} movie={row_} /></td>
+                                    <td><MoviesEdit refreshHandler={this.editMovieRrefreshHandler} movie={row_} /></td>
                                     {Object.values(row_).map((item, index_) => <td key={"MoviesItem" + index + index_}>{item}</td>)}
-                                    <td><MoviesRemove refreshHandler={this.removeRrefreshHandler} movieName={row_['name']} moviePublished={row_['published']} /></td>
+                                    <td><MoviesRemove refreshHandler={this.removeMovieRrefreshHandler} movieName={row_['name']} moviePublished={row_['published']} /></td>
                                 </tr>
                             )}
                     </tbody>

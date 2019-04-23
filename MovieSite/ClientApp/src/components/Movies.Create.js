@@ -56,7 +56,6 @@ export class MoviesCreate extends React.Component {
             <MoviesLayout heading="Create Movie Dialog" show={this.state.show} handleClose={this.handleClose}
                 onSubmit={this.handleSubmit}/>
             : null
- {/* name="ali" published="1995-01-01" director="MrNnobody" description='' */}
         return (
             <div>
 

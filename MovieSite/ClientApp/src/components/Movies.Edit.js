@@ -1,6 +1,5 @@
 ﻿import React from 'react';
 import { MoviesLayout } from './Movies.Layout';
-import Modal from 'react-bootstrap/Modal'
 import { Button } from 'react-bootstrap';
 
 export class MoviesEdit extends React.Component {
@@ -10,6 +9,7 @@ export class MoviesEdit extends React.Component {
         this.state = { MoviesCreateMessage: null, popOver: false };
         this.handleShow = this.handleShow.bind(this);
         this.handleClose = this.handleClose.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
 
         this.state = {
             show: false,
@@ -17,7 +17,7 @@ export class MoviesEdit extends React.Component {
     }
 
     handleSubmit(formData) {
-        fetch('/api/Movies', {
+        fetch('/api/Movies/' + formData.oldName + '/' + formData.oldPublished, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -33,7 +33,7 @@ export class MoviesEdit extends React.Component {
                         <p>{JSON.stringify(formData)}</p>
                         </div >
                     })
-                    this.props.onFetch(data)
+                    this.props.refreshHandler(data)
                 } else {
                     console.log(data)
                     this.setState({
@@ -43,6 +43,8 @@ export class MoviesEdit extends React.Component {
                     })
 
                 }
+                this.handleClose()
+
             })
 
     }
@@ -58,7 +60,7 @@ export class MoviesEdit extends React.Component {
     render() {
         let modal = this.state.show ?
             <MoviesLayout heading="Edit Movie Dialog" show={this.state.show} handleClose={this.handleClose}
-                movie={this.props.movie} />
+                movie={this.props.movie} onSubmit={this.handleSubmit} />
             : null
 
         return (

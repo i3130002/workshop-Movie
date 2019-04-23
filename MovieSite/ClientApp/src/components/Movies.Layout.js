@@ -9,7 +9,9 @@ export class MoviesLayout extends React.Component {
             movie: this.props.movie ?
                 {
                     name: this.props.movie.name ? this.props.movie.name : "",
+                    oldName: this.props.movie.name ? this.props.movie.name : "",
                     published: this.props.movie.published ? this.props.movie.published : "",
+                    oldPublished: this.props.movie.published ? this.props.movie.published : "",
                     director: this.props.movie.director ? this.props.movie.director : "",
                     description: this.props.movie.description ? this.props.movie.description : "",
                 }
