@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -24,7 +25,9 @@ namespace MovieSite.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Movie>>> GetMovie()
         {
-            return await _context.Movie.ToListAsync();
+            var list= await _context.Movie.ToListAsync();
+           
+            return list;
         }
 
         // GET: api/Movies/5
@@ -54,18 +57,34 @@ namespace MovieSite.Controllers
             return movie;
         }
 
-        [HttpPost("{name}/{published}")]
-        public async Task<ActionResult<Movie>> EditMovie(string name, DateTime published, Movie newMovie)
+        private bool DateMatch(string date)
         {
-            var movie = await _context.Movie.FindAsync(name, published);
-            if (movie == null)
-            {
-                return NotFound();
-            }
+            return Regex.IsMatch(date, @"^([12]\d{3}-(0[1-9]|1[0-2]|\d)-(0[1-9]|[12]\d|3[01]))$");
+        }
+
+        [HttpPost("{name}/{published}")]
+        public async Task<ActionResult<Movie>> EditMovie(string name, string published, Movie newMovie)
+        {
+            if (!ModelState.IsValid || !DateMatch(published))
+                return BadRequest();
+
+            //var movie = await _context.Movie.FindAsync(name, published);
+            //if (movie == null)
+            //{
+            //    return NotFound();
+            //}
 
             if (name == newMovie.Name && published == newMovie.Published)
             {
-                _context.Movie.Update(newMovie);
+                try
+                {
+                    _context.Movie.Update(newMovie);
+
+                }
+                catch (Exception e)
+                {
+                    return Content(e.Message);
+                }
                 await _context.SaveChangesAsync();
                 return Content("Updated");
             }
@@ -78,6 +97,9 @@ namespace MovieSite.Controllers
         [HttpPost]
         public async Task<ActionResult<Movie>> PostMovie(Movie movie)
         {
+            if (!ModelState.IsValid || !DateMatch(movie.Published))
+                return BadRequest();
+
             _context.Movie.Add(movie);
             try
             {
@@ -100,7 +122,7 @@ namespace MovieSite.Controllers
 
         // DELETE: api/Movies/5
         [HttpDelete("{name?}/{published?}")]
-        public async Task<ActionResult<Movie>> DeleteMovie(string name, DateTime published)
+        public async Task<ActionResult<Movie>> DeleteMovie(string name, string published)
         {
             var movie = await _context.Movie.FindAsync(name, published);
             if (movie == null)
@@ -114,7 +136,7 @@ namespace MovieSite.Controllers
             return movie;
         }
 
-        private bool MovieExists(string movieName, DateTime published)
+        private bool MovieExists(string movieName, string published)
         {
             return _context.Movie.Any(e => e.Name == movieName && e.Published == published);
         }

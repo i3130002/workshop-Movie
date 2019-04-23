@@ -1,9 +1,8 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace MovieSite.Migrations
 {
-    public partial class initial : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -12,7 +11,7 @@ namespace MovieSite.Migrations
                 columns: table => new
                 {
                     Name = table.Column<string>(nullable: false),
-                    Published = table.Column<DateTime>(type: "Date", nullable: false),
+                    Published = table.Column<string>(nullable: false),
                     Director = table.Column<string>(nullable: true),
                     Description = table.Column<string>(nullable: true)
                 },

@@ -11,10 +11,14 @@ namespace MovieSite.Models
     {
         [Key]
         public string Name { get; set; }
+
         [Key]
-        [Column(TypeName = "Date")]
-        public DateTime Published { get; set; }
+        public string Published { get; set; }
         public string Director { get; set; }
         public string Description { get; set; }
+
+        
     }
+
+   
 }
